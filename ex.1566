@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+
+void mergeSort (int *point, int inicio, int fim){
+
+    int meio;
+
+    if(inicio < fim){
+        meio = (inicio + fim)/2;
+        mergeSort(point , inicio , meio);
+        mergeSort(point, (meio+1) , fim);
+        merge(point , inicio, meio, fim);
+    }
+}
+
+
+
+void merge (int *point, int inicio, int meio, int fim){
+
+    int *dir;
+    int *esq;
+    int tam_esq;
+    int tam_dir;
+    int a = 0;
+    int b = 0;
+    int k = inicio;
+
+    tam_esq = meio - inicio + 1;
+    tam_dir = fim - meio;
+
+    esq = (int*) malloc(tam_esq*sizeof(int));
+    dir = (int*) malloc(tam_dir*sizeof(int));
+
+    for (int i = 0; i < tam_esq; i++){
+        esq[i]= point[inicio+i];
+    }
+
+    for (int i = 0; i < tam_dir; i++){
+        dir[i] = point[meio+1+i];
+    }
+
+    while(a < tam_esq && b < tam_dir){
+        if (esq[a] <= dir[b]){
+            point[k] = esq[a];
+            k++;
+            a++;
+        }
+        else{
+            point[k] = dir[b];
+            k++;
+            b++;
+        }
+    }
+
+    while (a < tam_esq){
+        point[k] = esq[a];
+        a++;
+        k++;
+    }
+
+    while (b < tam_dir){
+        point[k] = dir[b];
+        b++;
+        k++;
+    }
+
+    free(esq);
+    free(dir);
+}
+
+int main(){
+
+    int nc;
+    int *vet;
+    int tam;
+    int inicio = 0;
+
+    scanf("%d" , &nc);
+    
+    for(int i = 0; i < nc; i++){
+
+        scanf("%d", &tam);
+        
+        vet = (int*) malloc (tam*sizeof(int));
+
+        for (int j = 0; j < tam; j++){
+            scanf("%d", &vet[j]);
+        }
+
+        mergeSort(vet, inicio, (tam-1));
+
+        for (int j = 0; j < tam; j++){
+            printf("%d", vet[j]);
+            if (j < tam - 1) {
+                printf(" ");
+            }
+        }
+        printf("\n");
+        
+        free(vet);
+    }
+}
